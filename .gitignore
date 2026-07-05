@@ -2,6 +2,7 @@
 assets/chatbot-walkthrough.webm
 assets/*.wav
 assets/chatbot-walkthrough.mp4
+assets/sap-walkthrough.webm
 
 # OS / editor cruft
 .DS_Store

@@ -58,15 +58,23 @@
           A multi-agent pipeline that ingests a clinical-trial protocol PDF and drafts a
           sponsor-grade Statistical Analysis Plan — estimands grounded in guidance, an
           "Open Decisions" review step that surfaces assumptions for a human instead of
-          guessing. Interactive demo below replays a real generated run; no data leaves your browser.
+          guessing. The walkthrough below replays a real generated run — no backend, no data leaves your browser.
         </p>
-        <!-- ponytail: iframe target is the copied static build; no backend at visitor time -->
         <div class="embed">
-          <iframe src="sap-demo/?sample=prot000&amp;doc=1" title="SAP generator demo" loading="lazy"></iframe>
+          <video controls preload="metadata" poster="assets/shot-sap.png"
+                 width="1280" height="800" style="width:100%;height:auto;background:#0a0e14;">
+            <source src="assets/sap-walkthrough-final.mp4" type="video/mp4" />
+            Your browser can’t play this video —
+            <a href="assets/sap-walkthrough-final.mp4">download the walkthrough (MP4)</a>.
+          </video>
         </div>
-        <p class="embed-caption">Static replay of a real generated run (synthetic LAPACT-style
-        protocol) — no backend, no API key, nothing leaves your browser.
-        <a href="sap-demo/" target="_blank" rel="noopener">Open the full interactive demo ↗</a></p>
+        <p class="embed-caption">~1-min screen recording of the canned demo on a <strong>synthetic
+        LAPACT-style</strong> public protocol — no backend, no API key, nothing leaves your browser.
+        In order: pick the sample protocol → the multi-agent pipeline streams through its stages
+        (extract → validate → reason · estimands → draft → review → finalize) → the finished,
+        formatted SAP with its section outline and one-click Word/PDF export.
+        <strong>All data shown is synthetic.</strong>
+        <a href="sap-demo/" target="_blank" rel="noopener">Try the interactive demo yourself ↗</a></p>
       </article>
 
       <!-- Piece 2 — Study-data Chatbot -->
