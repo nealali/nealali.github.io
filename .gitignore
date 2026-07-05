@@ -1,0 +1,8 @@
+# Intermediate / non-published media (kept locally, never shipped to the public site)
+assets/chatbot-walkthrough.webm
+assets/*.wav
+assets/chatbot-walkthrough.mp4
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db

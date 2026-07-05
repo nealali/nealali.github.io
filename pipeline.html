@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Case study — AI-authored SDTM→ADaM pipeline · Nasser AlAli</title>
+  <meta name="description" content="One dataset followed end-to-end: raw EDC to SDTM DM to ADaM ADSL, produced by an AI author and independently QC'd under a deterministic PROC COMPARE gate.">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* pipeline-specific styling; reuses the :root vars from style.css */
+    .case { max-width: 860px; }
+    .back { display: inline-block; color: var(--muted); font-size: .9rem; margin: 1.5rem 0 0; }
+
+    .flow {
+      display: flex; flex-wrap: wrap; align-items: stretch; gap: .4rem;
+      margin: 2rem 0 1rem; padding: 1.25rem; background: var(--card);
+      border: 1px solid var(--line); border-radius: 12px;
+    }
+    .node {
+      flex: 1 1 110px; text-align: center; padding: .7rem .5rem;
+      border: 1px solid var(--line); border-radius: 8px; background: var(--bg);
+      font-size: .82rem; line-height: 1.3; display: flex; flex-direction: column; justify-content: center;
+    }
+    .node b { display: block; font-size: .74rem; letter-spacing: .04em; color: var(--muted); text-transform: uppercase; margin-bottom: .2rem; }
+    .node.gate { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+    .node.gate b { color: var(--accent); }
+    .arrow { align-self: center; color: var(--muted); font-size: 1.1rem; }
+    @media (max-width: 620px) { .arrow { transform: rotate(90deg); } .node { flex-basis: 100%; } }
+
+    .stage { border-top: 1px solid var(--line); padding: 2.25rem 0; }
+    .stage-n {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 1.8rem; height: 1.8rem; border-radius: 50%; background: var(--accent);
+      color: #fff; font-weight: 700; font-size: .95rem; margin-right: .6rem;
+    }
+    .stage h2 { display: flex; align-items: center; font-size: 1.3rem; margin: 0 0 .4rem; }
+    .whatis { color: var(--muted); font-style: italic; margin: 0 0 1rem; }
+
+    pre {
+      background: var(--card); border: 1px solid var(--line); border-radius: 8px;
+      padding: 1rem; overflow-x: auto; font-size: .82rem; line-height: 1.5;
+    }
+    pre code { background: none; padding: 0; font-size: inherit; }
+
+    table.spec { width: 100%; border-collapse: collapse; font-size: .85rem; display: block; overflow-x: auto; }
+    table.spec th, table.spec td { border: 1px solid var(--line); padding: .45rem .6rem; text-align: left; vertical-align: top; }
+    table.spec th { background: var(--card); white-space: nowrap; }
+
+    .compare { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1rem 0; }
+    .compare > div { flex: 1 1 240px; border: 1px solid var(--line); border-radius: 8px; padding: 1rem; }
+    .compare .fail { border-color: #d1242f; }
+    .compare .ok { border-color: #1a7f37; }
+    .verdict { font-weight: 700; }
+    .verdict.fail { color: #d1242f; }
+    .verdict.ok { color: #1a7f37; }
+    .callout { border-left: 3px solid var(--accent); padding: .5rem 0 .5rem 1rem; margin: 1.25rem 0; color: var(--fg); }
+    .synthetic-note { color: var(--muted); font-size: .9rem; border-top: 1px solid var(--line); padding-top: 1.5rem; margin-top: 1rem; }
+  </style>
+</head>
+<body>
+  <main class="case">
+    <a class="back" href="index.html">← Back to portfolio</a>
+
+    <h1>One dataset, end&#8209;to&#8209;end: how an AI author builds a submission&#8209;grade deliverable that survives independent QC</h1>
+
+    <p class="lede">
+      This follows a single dataset — <strong>Demographics</strong> — through the whole regulated
+      pipeline of a clinical trial: raw EDC data → SDTM&nbsp;<code>DM</code> → ADaM&nbsp;<code>ADSL</code>
+      → define.xml. An LLM writes each program against an approved specification; an
+      <strong>independent QC programmer, architecturally blocked from reading the production code</strong>,
+      rebuilds the same dataset from scratch; and a deterministic gate refuses to pass anything until
+      the two builds match <strong>byte-for-byte</strong> under SAS <code>PROC&nbsp;COMPARE</code>.
+    </p>
+    <p>
+      The design principle is <em>"validate the wrappers, not the brain."</em> The model is treated as a
+      qualified author, not an oracle — its output can't ship until independent, deterministic checks pass
+      and a named human signs off. Below, the gate does exactly its job: it catches a real defect and
+      forces a fix to the <em>specification</em>, not a silent patch to the data.
+    </p>
+    <p class="synthetic-note" style="border:0;padding:0;margin:.5rem 0 0">
+      Study <code>ONC-000-DEV</code> is fully synthetic, calibrated to a <em>published, public</em> trial
+      (SUNLIGHT, NCT04737187) and unaffiliated with its sponsors. No real patient data appears anywhere.
+    </p>
+
+    <!-- Pipeline diagram -->
+    <div class="flow" aria-label="Pipeline stages">
+      <div class="node"><b>1 · Raw</b>EDC extracts (CDASH)</div>
+      <span class="arrow">→</span>
+      <div class="node"><b>2 · Spec</b>SDTM DM spec</div>
+      <span class="arrow">→</span>
+      <div class="node"><b>3 · Program</b>DM (SAS)</div>
+      <span class="arrow">→</span>
+      <div class="node gate"><b>4 · QC gate</b>Double program · PROC COMPARE</div>
+      <span class="arrow">→</span>
+      <div class="node"><b>5 · Spec</b>ADaM ADSL spec</div>
+      <span class="arrow">→</span>
+      <div class="node"><b>6 · Program</b>ADSL (SAS)</div>
+      <span class="arrow">→</span>
+      <div class="node"><b>7 · define.xml</b>Submission metadata</div>
+    </div>
+
+    <!-- STAGE 1 -->
+    <section class="stage">
+      <h2><span class="stage-n">1</span>Raw EDC data</h2>
+      <p class="whatis">Collected data as it leaves the electronic data capture system.</p>
+      <p>
+        The demographics build draws on five CDASH-named EDC extracts from a dated snapshot
+        (<code>raw/snapshots/2026-07-01-crf-driven/</code>) — demographics plus disposition, exposure,
+        and adverse events, because some SDTM variables are <em>derived</em> across domains (death date,
+        actual treatment arm). The primary extract carries the collected fields:
+      </p>
+      <pre><code>dm-raw.csv (CDASH columns):
+  SUBJID, BRTHDAT, RANDDAT, RFICDAT, ARM, ARMCD, SEX,
+  RACE, ETHNIC, COUNTRY, SITEID, RASSTAT, TSFMET, ECOGPS</code></pre>
+      <p>
+        Collection itself is CRF-driven: the SAP dictates what must be captured, the CRF module specs
+        encode the CDASH fields, and the annotated CRF (aCRF) documents where each SDTM variable comes
+        from. Nothing is programmed until that trace exists.
+      </p>
+    </section>
+
+    <!-- STAGE 2 -->
+    <section class="stage">
+      <h2><span class="stage-n">2</span>SDTM specification</h2>
+      <p class="whatis">The contract: every variable, its source, and its derivation — written and QC-approved before any code.</p>
+      <p>
+        The <code>DM</code> specification pins each variable to SDTMIG&nbsp;3.4, states its exact standard
+        label, and gives an unambiguous derivation. A representative slice of the derived variables:
+      </p>
+      <table class="spec">
+        <thead><tr><th>Variable</th><th>Label</th><th>Origin</th><th>Derivation</th></tr></thead>
+        <tbody>
+          <tr><td><code>USUBJID</code></td><td>Unique Subject Identifier</td><td>Assigned</td><td><code>catx('-', STUDYID, SITEID, SUBJID)</code></td></tr>
+          <tr><td><code>RFSTDTC</code></td><td>Subject Reference Start Date/Time</td><td>Derived</td><td><code>RANDDAT</code> if <code>ARMCD ≠ NOTASSGN</code>; else null (screen failure)</td></tr>
+          <tr><td><code>DTHDTC</code></td><td>Date/Time of Death</td><td>Derived</td><td><strong>Earliest</strong> (<code>min</code>) of the DS death date and the fatal-AE date; blank if no death</td></tr>
+          <tr><td><code>ACTARMCD</code></td><td>Actual Arm Code</td><td>Derived</td><td>Rule cascade: not-assigned → not-treated → any bevacizumab ⇒ combination arm → planned arm</td></tr>
+          <tr><td><code>AGE</code></td><td>Age</td><td>Derived</td><td><code>floor((anchor − imputed_birth)/365.25)</code>; anchor = <code>RFSTDTC</code> else <code>RFICDTC</code></td></tr>
+        </tbody>
+      </table>
+      <p class="callout">
+        Note the <code>DTHDTC</code> rule: <em>earliest</em> of two sources. That single word is where the
+        QC gate later earns its keep — see stage 4.
+      </p>
+    </section>
+
+    <!-- STAGE 3 -->
+    <section class="stage">
+      <h2><span class="stage-n">3</span>Production SAS program</h2>
+      <p class="whatis">The AI author writes to the approved spec — and cites it in the header.</p>
+      <p>
+        Every production program carries machine-checked header tags binding it to its spec, SAP, IG
+        version, controlled-terminology package, and work order. A hook blocks any write that omits them:
+      </p>
+      <pre><code>/*-------------------------------------------------------------*
+ * Program: dm.sas
+ * Purpose: Derive SDTM DM (Demographics) for ONC-000-DEV.
+ * @spec    specs/sdtm/DM.md@v3
+ * @sap     sap.md#dm
+ * @sdtmig  3.4
+ * @ct      2026-03-27
+ * @wo      WO-2026-0010
+ *-------------------------------------------------------------*/</code></pre>
+      <p>The <code>DTHDTC</code> derivation, implementing the "earliest of two sources" rule verbatim:</p>
+      <pre><code>/* DTHDTC = earliest (min) of DS death date and fatal AE date; a blank
+   source is "no date from that source", not a minimum -- exclude it
+   rather than let it win the earliest-date comparison. */
+length dthdtc $10;
+if      ds_death_dtc = '' and ae_death_dtc = '' then dthdtc = '';
+else if ds_death_dtc = ''                       then dthdtc = ae_death_dtc;
+else if ae_death_dtc = ''                       then dthdtc = ds_death_dtc;
+else if ds_death_dtc &lt;= ae_death_dtc          then dthdtc = ds_death_dtc;
+else                                                 dthdtc = ae_death_dtc;</code></pre>
+    </section>
+
+    <!-- STAGE 4 -->
+    <section class="stage">
+      <h2><span class="stage-n">4</span>The QC gate — independent double programming</h2>
+      <p class="whatis">A second programmer rebuilds the dataset blind; a deterministic compare must find zero differences.</p>
+      <p>
+        A separate QC programmer derives <code>DM</code> from the same spec in an isolated context, with
+        <strong>filesystem-level denial of read access to the production program</strong> — the spec is the
+        only channel between them. Then <code>PROC COMPARE</code> runs, and its <code>SYSINFO</code> return
+        code is parsed bit-by-bit. On the first run:
+      </p>
+      <div class="compare">
+        <div class="fail">
+          <p class="verdict fail">✗ COMPARE_FAIL</p>
+          <p>65 / 65 obs in common · <strong>0</strong> unequal values</p>
+          <p><code>SYSINFO = 32</code> → bit 5 only: <strong>variable labels differ</strong></p>
+        </div>
+      </div>
+      <p>
+        The data was identical — but the two builds disagreed on variable <em>labels</em>. Root cause: the
+        spec had <strong>no authoritative Label column</strong>, and the standards lookup script carries no
+        labels, so each programmer chose labels independently. This is a <strong>spec ambiguity</strong>,
+        not a programmer error — and the gate refused to let it slide. Reconciliation surfaced two further
+        latent defects the independent builds had silently agreed on (a <code>min</code>/<code>max</code>
+        contradiction in the <code>DTHDTC</code> text, and an undercounted actual-arm example).
+      </p>
+      <p class="callout">
+        The fix went to the <strong>specification</strong>, not the data. <code>DM.md</code> was amended
+        <code>v1 → v3</code>: an authoritative SDTMIG label column added, the <code>DTHDTC</code> rule
+        pinned to <em>earliest</em> (consistent with the SAP's cutoff-censoring for overall survival),
+        and the actual-arm rule corrected. Both programmers then rebuilt against&nbsp;<code>v3</code>:
+      </p>
+      <div class="compare">
+        <div class="ok">
+          <p class="verdict ok">✓ COMPARE_OK</p>
+          <p>65 / 65 obs · 0 unequal values · all attributes (incl. labels) match</p>
+          <p><code>SYSINFO = 0</code> → gate clean</p>
+        </div>
+      </div>
+      <p>
+        Awaiting a named human sign-off to mark the deliverable <em>validated</em> — the automated gate
+        never grants that status on its own.
+      </p>
+    </section>
+
+    <!-- STAGE 5 -->
+    <section class="stage">
+      <h2><span class="stage-n">5</span>ADaM specification</h2>
+      <p class="whatis">The analysis-ready layer: population flags and treatment variables, derived from the QC'd SDTM.</p>
+      <p>
+        <code>ADSL</code> — the subject-level analysis dataset — is built <em>from</em> the now-verified
+        <code>DM</code> (plus EX/DS/AE), per ADaMIG&nbsp;1.3. The derivations that drive every downstream
+        table:
+      </p>
+      <table class="spec">
+        <thead><tr><th>Variable</th><th>Label</th><th>Derivation</th></tr></thead>
+        <tbody>
+          <tr><td><code>TRT01P</code> / <code>TRT01A</code></td><td>Planned / Actual Treatment</td><td>= <code>ARM</code> / <code>ACTARM</code> from DM</td></tr>
+          <tr><td><code>TRTSDT</code></td><td>Date of First Exposure</td><td>Earliest <code>EXSTDTC</code> where <code>EXTRT='TRIFLURIDINE/TIPIRACIL'</code>; null if never dosed</td></tr>
+          <tr><td><code>FASFL</code></td><td>Full Analysis Set Flag</td><td><code>'Y'</code> for randomized subjects (DM.<code>RFSTDTC</code> non-missing); <code>'N'</code> for screen failures</td></tr>
+          <tr><td><code>SAFFL</code></td><td>Safety Analysis Set Flag</td><td><code>'Y'</code> when ≥1 dose of trifluridine/tipiracil in EX; analyzed by actual arm</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- STAGE 6 -->
+    <section class="stage">
+      <h2><span class="stage-n">6</span>ADaM production program</h2>
+      <p class="whatis">Same gated workflow, one layer up.</p>
+      <p>
+        <code>ADSL</code> follows the identical pattern as stage 3–4: an AI author programs it against the
+        approved spec above, an isolated QC programmer rebuilds it, and <code>PROC COMPARE</code> must reach
+        <code>SYSINFO = 0</code> before it ships — with the same <code>@spec / @sap / @adamig</code> header
+        citations. Because <code>ADSL</code> derives almost entirely from the already-verified <code>DM</code>,
+        it inherits a clean, traceable foundation.
+      </p>
+      <p class="synthetic-note" style="border:0;padding:0">
+        <strong>Status:</strong> the <code>ADSL</code> specification is complete and QC-approved (stage 5);
+        the production program is the next build in this synthetic study. The mechanism is identical to the
+        <code>DM</code> gate already shown — the point of this walkthrough is the <em>governed process</em>,
+        which is proven end-to-end on <code>DM</code>.
+      </p>
+    </section>
+
+    <!-- STAGE 7 -->
+    <section class="stage">
+      <h2><span class="stage-n">7</span>define.xml</h2>
+      <p class="whatis">Submission-ready, machine-readable metadata — a by-product of the same specs.</p>
+      <p>
+        Because every variable was specified up front, the regulatory <code>define.xml</code> (Define-XML 2.1)
+        falls out of the pipeline rather than being hand-written afterward. The <code>DM</code> item group,
+        each variable tagged with its origin (<em>Assigned / Collected / Derived</em>):
+      </p>
+      <pre><code>&lt;ItemGroupDef OID="IG.DM" Name="DM" Domain="DM" SASDatasetName="DM"
+              def:Structure="One record per subject" def:Class="SPECIAL PURPOSE"&gt;
+  &lt;Description&gt;&lt;TranslatedText xml:lang="en"&gt;Demographics&lt;/TranslatedText&gt;&lt;/Description&gt;
+  &lt;ItemRef ItemOID="IT.DM.USUBJID" OrderNumber="3" Mandatory="Yes" KeySequence="2"/&gt;
+  &lt;ItemRef ItemOID="IT.DM.DTHDTC"  OrderNumber="11" Mandatory="No"/&gt;
+  ...
+&lt;/ItemGroupDef&gt;
+
+&lt;ItemDef OID="IT.DM.DTHDTC" Name="DTHDTC" DataType="text" Length="10"&gt;
+  &lt;Description&gt;&lt;TranslatedText xml:lang="en"&gt;Date/Time of Death&lt;/TranslatedText&gt;&lt;/Description&gt;
+  &lt;def:Origin Type="Derived"/&gt;
+&lt;/ItemDef&gt;</code></pre>
+    </section>
+
+    <p class="synthetic-note">
+      <strong>What this demonstrates:</strong> I designed and built this pipeline — the specs, the SAS
+      production and QC programs, the deterministic gate logic, and the standards knowledge layer the
+      citations resolve against. The value isn't that an LLM writes SAS; it's that its output is wrapped in
+      independent, deterministic, auditable checks that let it be trusted in a regulated setting.
+      Source is private (it processes confidential trial data and licensed CDISC standards); this
+      walkthrough runs entirely on synthetic <code>ONC-000-DEV</code>.
+    </p>
+    <a class="back" href="index.html">← Back to portfolio</a>
+  </main>
+</body>
+</html>

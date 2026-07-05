@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nasser AlAli — Statistics PhD + AI / Agent Engineer</title>
+  <meta name="description" content="Statistics PhD and SAS/CDISC statistical programmer building governed, regulatory-grade LLM/agent systems for oncology clinical trials.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip" href="#work">Skip to work</a>
+
+  <header class="site-header">
+    <a class="brand" href="#top">Nasser AlAli</a>
+    <nav aria-label="Primary">
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main id="top">
+
+    <!-- ===================== HERO ===================== -->
+    <section class="hero">
+      <p class="eyebrow">Statistical programming &nbsp;·&nbsp; AI / agent engineering</p>
+      <h1>I build LLM systems trustworthy enough for regulated clinical trials.</h1>
+      <p class="lede">
+        PhD in Statistics &amp; Data Science with ~5 years in SAS/CDISC statistical programming,
+        now designing agentic AI that produces SDTM/ADaM datasets and analysis documents under
+        <strong>deterministic, auditable gates</strong> — PROC COMPARE 0-diff double-programming,
+        isolated QC, cited standards. The rare overlap of deep clinical-statistics domain knowledge
+        and modern LLM/agent engineering.
+      </p>
+      <div class="hero-links">
+        <a class="btn" href="#work">See the work</a>
+        <a class="btn ghost" href="assets/resume.pdf">Résumé (PDF)</a>
+        <a class="btn ghost" href="https://www.linkedin.com/in/nasser-a-499b4194/" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn ghost" href="https://github.com/nealali" target="_blank" rel="noopener">GitHub</a>
+      </div>
+      <p class="disclaimer">
+        Source is private — the system processes confidential trial data and licensed CDISC
+        standards. <strong>Every demo below runs on fully synthetic data.</strong>
+      </p>
+    </section>
+
+    <!-- ===================== WORK ===================== -->
+    <section id="work" class="work">
+      <h2 class="section-title">Selected work</h2>
+
+      <!-- Piece 1 — SAP Generator -->
+      <article class="piece">
+        <div class="piece-head">
+          <h3>Protocol → SAP generator</h3>
+          <p class="tags">LangGraph multi-agent · RAG (ICH E9(R1)) · human-in-the-loop</p>
+        </div>
+        <p class="piece-blurb">
+          A multi-agent pipeline that ingests a clinical-trial protocol PDF and drafts a
+          sponsor-grade Statistical Analysis Plan — estimands grounded in guidance, an
+          "Open Decisions" review step that surfaces assumptions for a human instead of
+          guessing. Interactive demo below replays a real generated run; no data leaves your browser.
+        </p>
+        <!-- ponytail: iframe target is the copied static build; no backend at visitor time -->
+        <div class="embed">
+          <iframe src="sap-demo/?sample=prot000&amp;doc=1" title="SAP generator demo" loading="lazy"></iframe>
+        </div>
+        <p class="embed-caption">Static replay of a real generated run (synthetic LAPACT-style
+        protocol) — no backend, no API key, nothing leaves your browser.
+        <a href="sap-demo/" target="_blank" rel="noopener">Open the full interactive demo ↗</a></p>
+      </article>
+
+      <!-- Piece 2 — Study-data Chatbot -->
+      <article class="piece">
+        <div class="piece-head">
+          <h3>Study-data chatbot</h3>
+          <p class="tags">LLM → SQL · read-only guardrail · DRAFT watermarking · QC hand-off</p>
+        </div>
+        <p class="piece-blurb">
+          Plain-English questions over a trial's SDTM/ADaM data. The model writes audited,
+          read-only SQL and <strong>never computes a number itself</strong> — every answer is a real
+          row with a visible query trace, watermarked DRAFT until a human promotes it through the
+          QC lane. Renders Kaplan–Meier and waterfall charts inline.
+        </p>
+        <div class="embed">
+          <video controls preload="metadata" poster="assets/shot-km.png"
+                 width="1280" height="800" style="width:100%;height:auto;background:#0d2136;">
+            <source src="assets/chatbot-walkthrough-final.mp4" type="video/mp4" />
+            Your browser can’t play this video —
+            <a href="assets/chatbot-walkthrough-final.mp4">download the walkthrough (MP4)</a>.
+          </video>
+        </div>
+        <p class="embed-caption">~2-min screen recording on <strong>ONC-DEMO</strong> — a fully
+        synthetic study (no real patients, drugs, or study identifiers). In order: a plain-English
+        question → the live read-only SQL trace → a DRAFT-watermarked answer → a Kaplan–Meier curve
+        → the one-click “Make official (QC’d)” QC hand-off, and finally the read-only guardrail
+        refusing a nonsensical request. <strong>All data shown is synthetic.</strong></p>
+      </article>
+
+      <!-- Piece 3 — SDTM→ADaM pipeline walkthrough -->
+      <article class="piece">
+        <div class="piece-head">
+          <h3>End-to-end SDTM → ADaM pipeline</h3>
+          <p class="tags">spec-before-code · isolated double-programming QC · PROC COMPARE 0-diff · define.xml</p>
+        </div>
+        <p class="piece-blurb">
+          One dataset — Demographics — followed the whole regulated journey on a fully synthetic
+          study: raw EDC → SDTM <code>DM</code> → ADaM <code>ADSL</code>. An AI author writes to an
+          approved spec; an <strong>independent QC programmer, blocked from reading the production
+          code</strong>, rebuilds it; a deterministic gate demands a byte-for-byte PROC COMPARE match
+          before anything ships. Includes a real caught discrepancy that forced a spec fix.
+        </p>
+        <div class="pipeline-teaser">
+          <p class="pipeline-steps">
+            Raw EDC → SDTM spec → SDTM program → <strong>QC gate · PROC COMPARE</strong> →
+            ADaM spec → ADaM program → define.xml
+          </p>
+          <a class="btn" href="pipeline.html">Read the full walkthrough →</a>
+        </div>
+      </article>
+    </section>
+
+    <!-- ===================== ABOUT ===================== -->
+    <section id="about" class="about">
+      <h2 class="section-title">About</h2>
+      <p>
+        I'm a statistician and statistical programmer — a <strong>PhD in Statistics &amp; Data
+        Science</strong> and roughly five years in SAS/CDISC clinical programming. My doctoral
+        research developed a Bayesian zero-inflated, unipolar mixture item-response-theory model
+        with covariate-dependent latent classification, applied to <strong>patient-reported symptom
+        data</strong> (alcohol-use-disorder items from the NSDUH survey): Bayesian hierarchical
+        modeling, latent-class structure, and questionnaire/PRO measurement. Over the last year I
+        designed and built a "virtual biometrics department" — a system of AI agents that produce
+        and independently QC SDTM/ADaM datasets and analysis documents for oncology trials.
+      </p>
+      <p>
+        Its guiding principle is <em>"validate the wrappers, not the brain."</em> The LLM is treated
+        as a qualified author whose output can't leave the system until deterministic, independently
+        checkable gates pass and a named human signs off — no autonomous submission, every applied
+        rule citable and versioned. That posture is what lets modern AI touch a regulated, high-stakes
+        domain at all, and it's the thread through all three projects above.
+      </p>
+    </section>
+
+    <!-- ===================== SKILLS ===================== -->
+    <section id="skills" class="skills">
+      <h2 class="section-title">Stack</h2>
+      <div class="skill-grid">
+        <div>
+          <h3>Clinical / statistical</h3>
+          <ul>
+            <li>SAS (production + QC macros)</li>
+            <li>CDISC: SDTMIG, ADaMIG, CDASH, define.xml</li>
+            <li>RECIST 1.1, oncology endpoints (PFS/OS censoring)</li>
+            <li>Double-programming, PROC COMPARE, Pinnacle 21</li>
+            <li>R (pharmaverse), some biostatistics</li>
+          </ul>
+        </div>
+        <div>
+          <h3>AI / engineering</h3>
+          <ul>
+            <li>LLM/agent systems — Claude Agent SDK, LangGraph</li>
+            <li>RAG over regulatory standards; citation grounding</li>
+            <li>Deterministic enforcement hooks / guardrails</li>
+            <li>Evaluator gates &amp; structured output</li>
+            <li>Python · DuckDB · FastAPI · React</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== CONTACT ===================== -->
+    <section id="contact" class="contact">
+      <h2 class="section-title">Contact</h2>
+      <p>
+        <a href="mailto:n.bousaibah@gmail.com">n.bousaibah@gmail.com</a>
+        &nbsp;·&nbsp; <a href="https://www.linkedin.com/in/nasser-a-499b4194/" target="_blank" rel="noopener">LinkedIn</a>
+        &nbsp;·&nbsp; <a href="https://github.com/nealali" target="_blank" rel="noopener">GitHub</a>
+      </p>
+      <!-- ponytail: mailto is enough to start; add a Formspree form only if you want spam-safe intake -->
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>© <span id="year">2026</span> Nasser AlAli · Built as a static page, hosted on GitHub Pages.</p>
+  </footer>
+
+  <script>
+    // ponytail: the only JS the page needs — keep the year honest without hardcoding
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
