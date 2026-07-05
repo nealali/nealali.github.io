@@ -3,65 +3,155 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('theme');
+        if (t !== 'light' && t !== 'dark') {
+          t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+
   <title>Case study — AI-authored SDTM→ADaM pipeline · Nasser AlAli</title>
   <meta name="description" content="One dataset followed end-to-end: raw EDC to SDTM DM to ADaM ADSL, produced by an AI author and independently QC'd under a deterministic PROC COMPARE gate.">
-  <link rel="stylesheet" href="style.css">
-  <style>
-    /* pipeline-specific styling; reuses the :root vars from style.css */
-    .case { max-width: 860px; }
-    .back { display: inline-block; color: var(--muted); font-size: .9rem; margin: 1.5rem 0 0; }
+  <meta name="theme-color" content="#f3f4ef" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b110f" media="(prefers-color-scheme: dark)">
 
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%230e5c43'/%3E%3Cpath d='M6.5 12.5l3.2 3.2L17.5 8' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+
+  <link rel="preload" href="assets/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/fraunces-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/ibm-plex-mono-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* pipeline case-study — reuses tokens + fonts from style.css */
+    .doc { max-width: 880px; margin-inline: auto; padding-inline: clamp(1.15rem, 4vw, 2rem); padding-block: clamp(2rem, 5vw, 3.4rem) 4rem; }
+
+    .back {
+      display: inline-flex; align-items: center; gap: .45rem;
+      font-family: var(--font-mono); font-size: .8rem; color: var(--muted);
+      margin: 0 0 1.8rem;
+    }
+    .back:hover { color: var(--brand); text-decoration: none; }
+    .back .ico { width: 1em; height: 1em; }
+    .back--foot { margin: 2.5rem 0 0; }
+
+    .doc h1 {
+      font-size: clamp(1.95rem, 1.3rem + 2.4vw, 2.9rem);
+      line-height: 1.1; letter-spacing: -.015em; margin: 0; color: var(--ink);
+      text-wrap: balance;
+    }
+    .doc .lede {
+      font-size: clamp(1.08rem, 1rem + .5vw, 1.24rem);
+      color: var(--ink-2); line-height: 1.6; max-width: 68ch;
+      margin: 1.3rem 0 0;
+    }
+    .doc > p { color: var(--ink-2); max-width: 70ch; }
+    .doc .lede code, .doc p code { font-size: .82em; }
+
+    .kicker-note { color: var(--muted); font-size: .9rem; margin: .8rem 0 0; max-width: 70ch; }
+    .kicker-note code { font-size: .82em; }
+
+    /* flow diagram */
     .flow {
       display: flex; flex-wrap: wrap; align-items: stretch; gap: .4rem;
-      margin: 2rem 0 1rem; padding: 1.25rem; background: var(--card);
-      border: 1px solid var(--line); border-radius: 12px;
+      margin: 2.2rem 0 1rem; padding: 1rem; background: var(--surface-2);
+      border: 1px solid var(--line); border-radius: var(--r);
     }
     .node {
-      flex: 1 1 110px; text-align: center; padding: .7rem .5rem;
-      border: 1px solid var(--line); border-radius: 8px; background: var(--bg);
-      font-size: .82rem; line-height: 1.3; display: flex; flex-direction: column; justify-content: center;
+      flex: 1 1 108px; text-align: center; padding: .65rem .5rem;
+      border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--surface);
+      font-family: var(--font-mono); font-size: .74rem; line-height: 1.3; color: var(--ink-2);
+      display: flex; flex-direction: column; justify-content: center;
     }
-    .node b { display: block; font-size: .74rem; letter-spacing: .04em; color: var(--muted); text-transform: uppercase; margin-bottom: .2rem; }
-    .node.gate { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
-    .node.gate b { color: var(--accent); }
-    .arrow { align-self: center; color: var(--muted); font-size: 1.1rem; }
+    .node b { display: block; font-size: .62rem; letter-spacing: .05em; color: var(--muted); text-transform: uppercase; margin-bottom: .22rem; font-weight: 500; }
+    .node.is-gate { border-color: var(--pass); background: var(--pass-tint); color: var(--pass); }
+    .node.is-gate b { color: var(--pass); }
+    .arrow { align-self: center; color: var(--muted); font-size: 1.05rem; }
     @media (max-width: 620px) { .arrow { transform: rotate(90deg); } .node { flex-basis: 100%; } }
 
-    .stage { border-top: 1px solid var(--line); padding: 2.25rem 0; }
+    /* stages */
+    .stage { border-top: 1px solid var(--line); padding: 2.4rem 0; }
     .stage-n {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 1.8rem; height: 1.8rem; border-radius: 50%; background: var(--accent);
-      color: #fff; font-weight: 700; font-size: .95rem; margin-right: .6rem;
+      display: inline-flex; align-items: center; justify-content: center; flex: none;
+      width: 1.95rem; height: 1.95rem; border-radius: 8px; background: var(--brand);
+      color: #fff; font-family: var(--font-mono); font-weight: 600; font-size: .9rem; margin-right: .7rem;
     }
-    .stage h2 { display: flex; align-items: center; font-size: 1.3rem; margin: 0 0 .4rem; }
-    .whatis { color: var(--muted); font-style: italic; margin: 0 0 1rem; }
+    :root[data-theme="dark"] .stage-n { color: #06120d; }
+    @media (prefers-color-scheme: dark) { :root:not([data-theme]) .stage-n { color: #06120d; } }
+    .stage h2 { display: flex; align-items: center; font-size: clamp(1.3rem, 1.1rem + .8vw, 1.65rem); margin: 0 0 .55rem; letter-spacing: -.01em; color: var(--ink); }
+    .whatis { color: var(--muted); font-family: var(--font-display); font-style: italic; font-size: 1.04rem; margin: 0 0 1rem; }
+    .stage p { color: var(--ink-2); max-width: 72ch; }
 
+    /* code blocks */
     pre {
-      background: var(--card); border: 1px solid var(--line); border-radius: 8px;
-      padding: 1rem; overflow-x: auto; font-size: .82rem; line-height: 1.5;
+      background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--r-sm);
+      padding: 1rem 1.1rem; overflow-x: auto; font-size: .82rem; line-height: 1.55;
     }
-    pre code { background: none; padding: 0; font-size: inherit; }
+    pre code { background: none; padding: 0; font-size: inherit; color: var(--ink-2); }
 
-    table.spec { width: 100%; border-collapse: collapse; font-size: .85rem; display: block; overflow-x: auto; }
-    table.spec th, table.spec td { border: 1px solid var(--line); padding: .45rem .6rem; text-align: left; vertical-align: top; }
-    table.spec th { background: var(--card); white-space: nowrap; }
+    /* spec tables */
+    table.spec { width: 100%; border-collapse: collapse; font-size: .85rem; display: block; overflow-x: auto; margin: 1.1rem 0; }
+    table.spec th, table.spec td { border: 1px solid var(--line); padding: .5rem .65rem; text-align: left; vertical-align: top; }
+    table.spec th { background: var(--surface-2); white-space: nowrap; font-family: var(--font-mono); font-weight: 500; font-size: .76rem; letter-spacing: .03em; color: var(--ink-2); }
+    table.spec td { color: var(--ink-2); }
 
-    .compare { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1rem 0; }
-    .compare > div { flex: 1 1 240px; border: 1px solid var(--line); border-radius: 8px; padding: 1rem; }
-    .compare .fail { border-color: #d1242f; }
-    .compare .ok { border-color: #1a7f37; }
-    .verdict { font-weight: 700; }
-    .verdict.fail { color: #d1242f; }
-    .verdict.ok { color: #1a7f37; }
-    .callout { border-left: 3px solid var(--accent); padding: .5rem 0 .5rem 1rem; margin: 1.25rem 0; color: var(--fg); }
-    .synthetic-note { color: var(--muted); font-size: .9rem; border-top: 1px solid var(--line); padding-top: 1.5rem; margin-top: 1rem; }
+    /* PROC COMPARE verdict cards */
+    .compare { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.2rem 0; }
+    .compare > div { flex: 1 1 260px; border: 1px solid var(--line); border-radius: var(--r); padding: 1rem 1.15rem; background: var(--surface); }
+    .compare .fail { border-color: color-mix(in srgb, var(--fail) 45%, var(--line)); background: var(--fail-tint); }
+    .compare .ok { border-color: color-mix(in srgb, var(--pass) 45%, var(--line)); background: var(--pass-tint); }
+    .compare p { margin: .35rem 0; font-size: .9rem; color: var(--ink-2); }
+    .verdict { font-family: var(--font-mono); font-weight: 600; font-size: .95rem; display: flex; align-items: center; gap: .5rem; margin-bottom: .5rem !important; }
+    .verdict .ico { width: 1.15rem; height: 1.15rem; }
+    .verdict.fail { color: var(--fail); }
+    .verdict.ok { color: var(--pass); }
+
+    .callout {
+      border-left: 3px solid var(--brand); background: var(--brand-tint);
+      padding: .85rem 1.1rem; border-radius: 0 var(--r-sm) var(--r-sm) 0;
+      margin: 1.4rem 0; color: var(--ink-2); max-width: 74ch;
+    }
+    .synthetic-note { color: var(--muted); font-size: .9rem; border-top: 1px solid var(--line); padding-top: 1.5rem; margin-top: 1.6rem; max-width: 74ch; }
+    .synthetic-note strong { color: var(--ink-2); }
   </style>
 </head>
 <body>
-  <main class="case">
-    <a class="back" href="index.html">← Back to portfolio</a>
+  <a class="skip" href="#doc-h">Skip to the case study</a>
 
-    <h1>One dataset, end&#8209;to&#8209;end: how an AI author builds a submission&#8209;grade deliverable that survives independent QC</h1>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="index.html#top" aria-label="Nasser AlAli — home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+        </span>
+        <span>Nasser AlAli</span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="index.html#work">Work</a>
+        <a href="index.html#about">About</a>
+        <a href="index.html#contact">Contact</a>
+        <button class="theme-toggle" type="button" aria-label="Switch theme" aria-pressed="false">
+          <svg class="ico ico-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+          <svg class="ico ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="doc">
+    <a class="back" href="index.html#work">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 12H5m6-6-6 6 6 6"/></svg>
+      Back to the work
+    </a>
+
+    <p class="kicker">Case study · Verify</p>
+    <h1 id="doc-h">One dataset, end&#8209;to&#8209;end: how an AI author builds a submission&#8209;grade deliverable that survives independent QC</h1>
 
     <p class="lede">
       This follows a single dataset — <strong>Demographics</strong> — through the whole regulated
@@ -72,30 +162,30 @@
       the two builds match <strong>byte-for-byte</strong> under SAS <code>PROC&nbsp;COMPARE</code>.
     </p>
     <p>
-      The design principle is <em>"validate the wrappers, not the brain."</em> The model is treated as a
-      qualified author, not an oracle — its output can't ship until independent, deterministic checks pass
+      The design principle is <em>“validate the wrappers, not the brain.”</em> The model is treated as a
+      qualified author, not an oracle — its output can’t ship until independent, deterministic checks pass
       and a named human signs off. Below, the gate does exactly its job: it catches a real defect and
       forces a fix to the <em>specification</em>, not a silent patch to the data.
     </p>
-    <p class="synthetic-note" style="border:0;padding:0;margin:.5rem 0 0">
+    <p class="kicker-note">
       Study <code>ONC-000-DEV</code> is fully synthetic, calibrated to a <em>published, public</em> trial
-      (SUNLIGHT, NCT04737187) and unaffiliated with its sponsors. No real patient data appears anywhere.
+      and unaffiliated with its sponsors. No real patient data appears anywhere.
     </p>
 
     <!-- Pipeline diagram -->
     <div class="flow" aria-label="Pipeline stages">
       <div class="node"><b>1 · Raw</b>EDC extracts (CDASH)</div>
-      <span class="arrow">→</span>
+      <span class="arrow" aria-hidden="true">→</span>
       <div class="node"><b>2 · Spec</b>SDTM DM spec</div>
-      <span class="arrow">→</span>
+      <span class="arrow" aria-hidden="true">→</span>
       <div class="node"><b>3 · Program</b>DM (SAS)</div>
-      <span class="arrow">→</span>
-      <div class="node gate"><b>4 · QC gate</b>Double program · PROC COMPARE</div>
-      <span class="arrow">→</span>
+      <span class="arrow" aria-hidden="true">→</span>
+      <div class="node is-gate"><b>4 · QC gate</b>Double program · PROC COMPARE</div>
+      <span class="arrow" aria-hidden="true">→</span>
       <div class="node"><b>5 · Spec</b>ADaM ADSL spec</div>
-      <span class="arrow">→</span>
+      <span class="arrow" aria-hidden="true">→</span>
       <div class="node"><b>6 · Program</b>ADSL (SAS)</div>
-      <span class="arrow">→</span>
+      <span class="arrow" aria-hidden="true">→</span>
       <div class="node"><b>7 · define.xml</b>Submission metadata</div>
     </div>
 
@@ -160,7 +250,7 @@
  * @ct      2026-03-27
  * @wo      WO-2026-0010
  *-------------------------------------------------------------*/</code></pre>
-      <p>The <code>DTHDTC</code> derivation, implementing the "earliest of two sources" rule verbatim:</p>
+      <p>The <code>DTHDTC</code> derivation, implementing the “earliest of two sources” rule verbatim:</p>
       <pre><code>/* DTHDTC = earliest (min) of DS death date and fatal AE date; a blank
    source is "no date from that source", not a minimum -- exclude it
    rather than let it win the earliest-date comparison. */
@@ -184,7 +274,7 @@ else                                                 dthdtc = ae_death_dtc;</cod
       </p>
       <div class="compare">
         <div class="fail">
-          <p class="verdict fail">✗ COMPARE_FAIL</p>
+          <p class="verdict fail"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6m0-6 6 6"/></svg> COMPARE_FAIL</p>
           <p>65 / 65 obs in common · <strong>0</strong> unequal values</p>
           <p><code>SYSINFO = 32</code> → bit 5 only: <strong>variable labels differ</strong></p>
         </div>
@@ -200,12 +290,12 @@ else                                                 dthdtc = ae_death_dtc;</cod
       <p class="callout">
         The fix went to the <strong>specification</strong>, not the data. <code>DM.md</code> was amended
         <code>v1 → v3</code>: an authoritative SDTMIG label column added, the <code>DTHDTC</code> rule
-        pinned to <em>earliest</em> (consistent with the SAP's cutoff-censoring for overall survival),
+        pinned to <em>earliest</em> (consistent with the SAP’s cutoff-censoring for overall survival),
         and the actual-arm rule corrected. Both programmers then rebuilt against&nbsp;<code>v3</code>:
       </p>
       <div class="compare">
         <div class="ok">
-          <p class="verdict ok">✓ COMPARE_OK</p>
+          <p class="verdict ok"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> COMPARE_OK</p>
           <p>65 / 65 obs · 0 unequal values · all attributes (incl. labels) match</p>
           <p><code>SYSINFO = 0</code> → gate clean</p>
         </div>
@@ -219,7 +309,7 @@ else                                                 dthdtc = ae_death_dtc;</cod
     <!-- STAGE 5 -->
     <section class="stage">
       <h2><span class="stage-n">5</span>ADaM specification</h2>
-      <p class="whatis">The analysis-ready layer: population flags and treatment variables, derived from the QC'd SDTM.</p>
+      <p class="whatis">The analysis-ready layer: population flags and treatment variables, derived from the QC’d SDTM.</p>
       <p>
         <code>ADSL</code> — the subject-level analysis dataset — is built <em>from</em> the now-verified
         <code>DM</code> (plus EX/DS/AE), per ADaMIG&nbsp;1.3. The derivations that drive every downstream
@@ -281,12 +371,42 @@ else                                                 dthdtc = ae_death_dtc;</cod
     <p class="synthetic-note">
       <strong>What this demonstrates:</strong> I designed and built this pipeline — the specs, the SAS
       production and QC programs, the deterministic gate logic, and the standards knowledge layer the
-      citations resolve against. The value isn't that an LLM writes SAS; it's that its output is wrapped in
+      citations resolve against. The value isn’t that an LLM writes SAS; it’s that its output is wrapped in
       independent, deterministic, auditable checks that let it be trusted in a regulated setting.
       Source is private (it processes confidential trial data and licensed CDISC standards); this
       walkthrough runs entirely on synthetic <code>ONC-000-DEV</code>.
     </p>
-    <a class="back" href="index.html">← Back to portfolio</a>
+    <a class="back back--foot" href="index.html#work">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 12H5m6-6-6 6 6 6"/></svg>
+      Back to the work
+    </a>
   </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>© <span id="year">2026</span> Nasser AlAli</span>
+      <span>Static page · built by hand · hosted on GitHub Pages</span>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    (function () {
+      var root = document.documentElement;
+      var btn = document.querySelector('.theme-toggle');
+      function sync() {
+        var dark = root.getAttribute('data-theme') === 'dark';
+        btn.setAttribute('aria-pressed', String(dark));
+        btn.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
+      }
+      sync();
+      btn.addEventListener('click', function () {
+        var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+        try { localStorage.setItem('theme', next); } catch (e) {}
+        sync();
+      });
+    })();
+  </script>
 </body>
 </html>

@@ -3,192 +3,395 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Nasser AlAli — Statistics PhD + AI / Agent Engineer</title>
-  <meta name="description" content="Statistics PhD and SAS/CDISC statistical programmer building governed, regulatory-grade LLM/agent systems for oncology clinical trials.">
+
+  <!-- resolve theme before first paint to avoid a flash -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('theme');
+        if (t !== 'light' && t !== 'dark') {
+          t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+
+  <title>Nasser AlAli — Statistician + AI / agent engineer for clinical trials</title>
+  <meta name="description" content="Statistics PhD and SAS/CDISC programmer building governed, regulatory-grade LLM/agent systems for oncology trials — where the trust comes from independent, deterministic gates, not from trusting the model.">
+  <link rel="canonical" href="https://nealali.github.io/">
+  <meta name="theme-color" content="#f3f4ef" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b110f" media="(prefers-color-scheme: dark)">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Nasser AlAli — Statistician + AI / agent engineer for clinical trials">
+  <meta property="og:description" content="Governed, regulatory-grade LLM/agent systems for oncology trials: validate the wrappers, not the brain.">
+  <meta name="twitter:card" content="summary">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%230e5c43'/%3E%3Cpath d='M6.5 12.5l3.2 3.2L17.5 8' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+
+  <link rel="preload" href="assets/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/fraunces-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/ibm-plex-mono-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <a class="skip" href="#work">Skip to work</a>
+<body id="top">
+  <a class="skip" href="#work">Skip to the work</a>
 
   <header class="site-header">
-    <a class="brand" href="#top">Nasser AlAli</a>
-    <nav aria-label="Primary">
-      <a href="#work">Work</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
-    </nav>
+    <div class="wrap">
+      <a class="brand" href="#top" aria-label="Nasser AlAli — home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+        </span>
+        <span>Nasser AlAli</span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="#work">Work</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+        <button class="theme-toggle" type="button" aria-label="Switch theme" aria-pressed="false">
+          <svg class="ico ico-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+          <svg class="ico ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>
+        </button>
+      </nav>
+    </div>
   </header>
 
-  <main id="top">
+  <main>
 
     <!-- ===================== HERO ===================== -->
-    <section class="hero">
-      <p class="eyebrow">Statistical programming &nbsp;·&nbsp; AI / agent engineering</p>
-      <h1>I build LLM systems trustworthy enough for regulated clinical trials.</h1>
-      <p class="lede">
-        PhD in Statistics &amp; Data Science with ~5 years in SAS/CDISC statistical programming,
-        now designing agentic AI that produces SDTM/ADaM datasets and analysis documents under
-        <strong>deterministic, auditable gates</strong> — PROC COMPARE 0-diff double-programming,
-        isolated QC, cited standards. The rare overlap of deep clinical-statistics domain knowledge
-        and modern LLM/agent engineering.
-      </p>
-      <div class="hero-links">
-        <a class="btn" href="#work">See the work</a>
-        <a class="btn ghost" href="assets/resume.pdf">Résumé (PDF)</a>
-        <a class="btn ghost" href="https://www.linkedin.com/in/nasser-a-499b4194/" target="_blank" rel="noopener">LinkedIn</a>
-        <a class="btn ghost" href="https://github.com/nealali" target="_blank" rel="noopener">GitHub</a>
+    <section class="hero wrap" aria-labelledby="hero-h">
+      <div class="hero-grid">
+        <div>
+          <p class="kicker">Statistical programming · AI / agent engineering</p>
+          <h1 id="hero-h">I build LLM systems <span class="accent">trustworthy enough</span> for regulated clinical trials.</h1>
+          <p class="lede">
+            Statistics PhD and SAS/CDISC programmer with ~5 years in oncology trials — now
+            engineering agentic AI that drafts SDTM/ADaM datasets and analysis documents behind
+            deterministic, auditable gates. The rare overlap of clinical-statistics depth and
+            modern LLM/agent engineering.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn--primary" href="#work">See the work</a>
+            <a class="btn btn--ghost" href="assets/resume.pdf">Résumé (PDF)</a>
+            <a class="btn btn--ghost" href="https://www.linkedin.com/in/nasser-a-499b4194/" target="_blank" rel="noopener">
+              LinkedIn <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 7h10v10M7 17 17 7"/></svg>
+            </a>
+            <a class="btn btn--ghost" href="https://github.com/nealali" target="_blank" rel="noopener">
+              GitHub <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 7h10v10M7 17 17 7"/></svg>
+            </a>
+          </div>
+          <p class="disclaimer">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+            <span>Source is private — the system processes confidential trial data and licensed CDISC
+            standards. <strong>Every demo below runs on fully synthetic data.</strong></span>
+          </p>
+        </div>
+
+        <!-- signature: the QC-gate verification stamp -->
+        <aside class="gate" aria-label="How the QC gate works: two independent builds must match">
+          <div class="gate__head">
+            <span class="gate__label">QC gate</span>
+            <span class="gate__meta">double programming</span>
+          </div>
+          <div class="gate__body">
+            <div class="gate__lanes">
+              <span class="lane"><b>AI author</b> → build A</span>
+              <span class="lane"><b>QC · blind</b> → build B</span>
+            </div>
+            <div class="gate__arrow" aria-hidden="true">
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+            </div>
+            <div class="gate__verdict">
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+              <span class="v-main">0 diff</span>
+              <span class="v-sub">SYSINFO = 0</span>
+            </div>
+          </div>
+          <p class="gate__foot"><b>Deterministic PROC COMPARE match.</b> Nothing ships until the gate is clean — and a named human signs off.</p>
+        </aside>
       </div>
-      <p class="disclaimer">
-        Source is private — the system processes confidential trial data and licensed CDISC
-        standards. <strong>Every demo below runs on fully synthetic data.</strong>
-      </p>
+    </section>
+
+    <!-- ===================== THESIS ===================== -->
+    <section class="section thesis" aria-labelledby="thesis-h">
+      <div class="wrap">
+        <div>
+          <p class="kicker">The operating principle</p>
+          <h2 class="thesis-quote" id="thesis-h">Validate the wrappers,<br><span class="accent">not the brain.</span></h2>
+        </div>
+        <div class="thesis-body">
+          <p>
+            Bringing AI into oncology drug development is blocked by <strong>trust</strong>: regulators
+            require every number to be traceable, reproducible, independently checked, and
+            human-signed-off. Naïve “let the LLM do it” fails that bar.
+          </p>
+          <p>
+            My work treats the model as a fast, qualified <em>author</em> — but lets nothing ship until
+            deterministic, independent, auditable gates pass and a named human approves. It’s the bridge
+            that lets modern AI’s speed reach a place where a wrong number is unacceptable.
+          </p>
+          <ul class="thesis-attrs">
+            <li class="chip chip--brand"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> traceable</li>
+            <li class="chip chip--brand"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> independently checked</li>
+            <li class="chip chip--brand"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> reproducible</li>
+            <li class="chip chip--brand"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> human-signed-off</li>
+          </ul>
+        </div>
+      </div>
     </section>
 
     <!-- ===================== WORK ===================== -->
-    <section id="work" class="work">
-      <h2 class="section-title">Selected work</h2>
-
-      <!-- Piece 1 — SAP Generator -->
-      <article class="piece">
-        <div class="piece-head">
-          <h3>Protocol → SAP generator</h3>
-          <p class="tags">LangGraph multi-agent · RAG (ICH E9(R1)) · human-in-the-loop</p>
-        </div>
-        <p class="piece-blurb">
-          A multi-agent pipeline that ingests a clinical-trial protocol PDF and drafts a
-          sponsor-grade Statistical Analysis Plan — estimands grounded in guidance, an
-          "Open Decisions" review step that surfaces assumptions for a human instead of
-          guessing. The walkthrough below replays a real generated run — no backend, no data leaves your browser.
+    <section class="section work" id="work" aria-labelledby="work-h">
+      <div class="wrap">
+        <h2 class="section-title" id="work-h"><span>Selected work</span></h2>
+        <p class="section-lead" style="color:var(--muted);margin:-1.2rem 0 2.4rem;max-width:60ch;">
+          Three systems, one idea: let the model move fast — but let nothing leave the room until an
+          independent, deterministic check proves it and a human signs off.
         </p>
-        <div class="embed">
-          <video controls preload="metadata" poster="assets/shot-sap.png"
-                 width="1280" height="800" style="width:100%;height:auto;background:#0a0e14;">
-            <source src="assets/sap-walkthrough-final.mp4" type="video/mp4" />
-            Your browser can’t play this video —
-            <a href="assets/sap-walkthrough-final.mp4">download the walkthrough (MP4)</a>.
-          </video>
-        </div>
-      </article>
 
-      <!-- Piece 2 — Study-data Chatbot -->
-      <article class="piece">
-        <div class="piece-head">
-          <h3>Study-data chatbot</h3>
-          <p class="tags">LLM → SQL · read-only guardrail · DRAFT watermarking · QC hand-off</p>
-        </div>
-        <p class="piece-blurb">
-          Plain-English questions over a trial's SDTM/ADaM data. The model writes audited,
-          read-only SQL and <strong>never computes a number itself</strong> — every answer is a real
-          row with a visible query trace, watermarked DRAFT until a human promotes it through the
-          QC lane. Renders Kaplan–Meier and waterfall charts inline.
-        </p>
-        <div class="embed">
-          <video controls preload="metadata" poster="assets/shot-km.png"
-                 width="1280" height="800" style="width:100%;height:auto;background:#0d2136;">
-            <source src="assets/chatbot-walkthrough-final.mp4" type="video/mp4" />
-            Your browser can’t play this video —
-            <a href="assets/chatbot-walkthrough-final.mp4">download the walkthrough (MP4)</a>.
-          </video>
-        </div>
-        <p class="embed-caption">~2-min screen recording on <strong>ONC-DEMO</strong> — a fully
-        synthetic study (no real patients, drugs, or study identifiers). In order: a plain-English
-        question → the live read-only SQL trace → a DRAFT-watermarked answer → a Kaplan–Meier curve
-        → the one-click “Make official (QC’d)” QC hand-off, and finally the read-only guardrail
-        refusing a nonsensical request. <strong>All data shown is synthetic.</strong></p>
-      </article>
+        <!-- Case 1 — SAP generator -->
+        <article class="case">
+          <div class="case-spine">
+            <p class="role">
+              <span class="role-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M14.364 13.634a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506l4.013-4.009a1 1 0 0 0-3.004-3.004zm.123-5.776A1 1 0 0 1 14 7V2"/><path d="M20 19.645V20a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l2.516 2.516M8 18h1"/></svg></span>
+              Author
+            </p>
+            <ul class="stack-tags">
+              <li>LangGraph multi-agent</li>
+              <li>RAG · ICH E9(R1) / FDA / EMA</li>
+              <li>Human-in-the-loop</li>
+            </ul>
+            <div class="case-status">
+              <span class="chip chip--brand">Working prototype</span>
+              <span class="chip">eval 83.75 / 100</span>
+            </div>
+          </div>
+          <div class="case-body">
+            <h3>Protocol → SAP generator</h3>
+            <p class="hook">A weeks-long first draft of a Statistical Analysis Plan — in minutes, with a human still holding the pen.</p>
+            <div class="why-what">
+              <div>
+                <p class="mini-label">Why it matters</p>
+                <p>Writing a Statistical Analysis Plan is weeks of senior-biostatistician time, and it gates everything downstream in a trial.</p>
+              </div>
+              <div>
+                <p class="mini-label">What it does</p>
+                <p>A multi-agent LangGraph pipeline reads a protocol PDF and drafts a sponsor-grade SAP — methodology grounded in guidance with citations — then an “Open Decisions” step surfaces the judgment calls for a human instead of guessing. Every choice traces back to a citation.</p>
+              </div>
+            </div>
+            <figure class="embed">
+              <video controls preload="metadata" poster="assets/shot-sap.png" width="1280" height="800">
+                <source src="assets/sap-walkthrough-final.mp4" type="video/mp4">
+                Your browser can’t play this video — <a href="assets/sap-walkthrough-final.mp4">download the walkthrough (MP4)</a>.
+              </video>
+              <figcaption>Screen recording of a real generated run on a public protocol — no backend, nothing leaves your browser. Working prototype; an internal eval scored <strong>83.75 / 100</strong> across 8 public protocols.</figcaption>
+            </figure>
+          </div>
+        </article>
 
-      <!-- Piece 3 — SDTM→ADaM pipeline walkthrough -->
-      <article class="piece">
-        <div class="piece-head">
-          <h3>End-to-end SDTM → ADaM pipeline</h3>
-          <p class="tags">spec-before-code · isolated double-programming QC · PROC COMPARE 0-diff · define.xml</p>
-        </div>
-        <p class="piece-blurb">
-          One dataset — Demographics — followed the whole regulated journey on a fully synthetic
-          study: raw EDC → SDTM <code>DM</code> → ADaM <code>ADSL</code>. An AI author writes to an
-          approved spec; an <strong>independent QC programmer, blocked from reading the production
-          code</strong>, rebuilds it; a deterministic gate demands a byte-for-byte PROC COMPARE match
-          before anything ships. Includes a real caught discrepancy that forced a spec fix.
-        </p>
-        <div class="pipeline-teaser">
-          <p class="pipeline-steps">
-            Raw EDC → SDTM spec → SDTM program → <strong>QC gate · PROC COMPARE</strong> →
-            ADaM spec → ADaM program → define.xml
-          </p>
-          <a class="btn" href="pipeline.html">Read the full walkthrough →</a>
-        </div>
-      </article>
+        <!-- Case 2 — Study-data chatbot -->
+        <article class="case">
+          <div class="case-spine">
+            <p class="role">
+              <span class="role-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M16 10a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 14.286V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2zm4-1a2 2 0 0 1 2 2v10.286a.71.71 0 0 1-1.212.502l-2.202-2.202A2 2 0 0 0 17.172 19H10a2 2 0 0 1-2-2v-1"/></svg></span>
+              Explore
+            </p>
+            <ul class="stack-tags">
+              <li>LLM → read-only SQL</li>
+              <li>Never computes a number</li>
+              <li>DRAFT watermark · QC hand-off</li>
+            </ul>
+            <div class="case-status">
+              <span class="chip chip--brand">Working v1</span>
+              <span class="chip">synthetic study</span>
+            </div>
+          </div>
+          <div class="case-body">
+            <h3>Study-data chatbot</h3>
+            <p class="hook">Ask a trial’s data anything — and it structurally cannot make a number up.</p>
+            <div class="why-what">
+              <div>
+                <p class="mini-label">Why it matters</p>
+                <p>Non-technical staff wait on programmers for every ad-hoc question, and generic “chat with your data” tools hallucinate numbers — a non-starter in a trial.</p>
+              </div>
+              <div>
+                <p class="mini-label">What it does</p>
+                <p>Plain-English Q&amp;A over a study’s SDTM/ADaM data. The model never computes a number — it writes audited, read-only SQL, the database runs it, and it narrates the real rows. Every answer is watermarked DRAFT with a visible query trace and a one-click hand-off into the formal double-programming QC pipeline; KM and waterfall charts render inline.</p>
+              </div>
+            </div>
+            <figure class="embed">
+              <video controls preload="metadata" poster="assets/shot-km.png" width="1280" height="800">
+                <source src="assets/chatbot-walkthrough-final.mp4" type="video/mp4">
+                Your browser can’t play this video — <a href="assets/chatbot-walkthrough-final.mp4">download the walkthrough (MP4)</a>.
+              </video>
+              <figcaption>~2-min recording on <strong>ONC-DEMO</strong>, a fully synthetic study. In order: a plain-English question → the live read-only SQL trace → a DRAFT-watermarked answer → a Kaplan–Meier curve → the one-click “Make official (QC’d)” hand-off, then the guardrail refusing a nonsensical request. <strong>All data shown is synthetic.</strong></figcaption>
+            </figure>
+          </div>
+        </article>
+
+        <!-- Case 3 — SDTM→ADaM pipeline + QC gate -->
+        <article class="case">
+          <div class="case-spine">
+            <p class="role">
+              <span class="role-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7m-7 3H8a2 2 0 0 1-2-2V9"/></svg></span>
+              Verify
+            </p>
+            <ul class="stack-tags">
+              <li>Spec-before-code</li>
+              <li>Isolated double-programming QC</li>
+              <li>PROC COMPARE 0-diff · define.xml</li>
+            </ul>
+            <div class="case-status">
+              <span class="chip chip--pass"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> DM: 0 diff</span>
+              <span class="chip">synthetic data</span>
+            </div>
+          </div>
+          <div class="case-body">
+            <h3>SDTM → ADaM pipeline + QC gate</h3>
+            <p class="hook">Two independent builds, one deterministic gate — trust that comes from proof, not from trusting the model.</p>
+            <div class="why-what">
+              <div>
+                <p class="mini-label">Why it matters</p>
+                <p>Regulatory programming rests on independent double-programming QC: two people build the same dataset separately and a tool proves they match. It’s the core trust mechanism — and it’s expensive and manual.</p>
+              </div>
+              <div>
+                <p class="mini-label">What it does</p>
+                <p>The full regulated lifecycle — raw → SDTM → ADaM → define.xml — with spec-before-code, an AI author, and an independent QC programmer <strong>architecturally blocked from reading the production code</strong>, reconciled by a deterministic PROC COMPARE gate that must hit zero differences before anything ships.</p>
+              </div>
+            </div>
+
+            <div class="flow-teaser">
+              <div class="flow-strip" aria-label="Pipeline stages">
+                <div class="flow-node"><b>1 · Raw</b>EDC (CDASH)</div>
+                <span class="flow-sep" aria-hidden="true">→</span>
+                <div class="flow-node"><b>2 · Spec</b>SDTM DM</div>
+                <span class="flow-sep" aria-hidden="true">→</span>
+                <div class="flow-node is-gate"><b>3 · Gate</b>PROC COMPARE</div>
+                <span class="flow-sep" aria-hidden="true">→</span>
+                <div class="flow-node"><b>4 · ADaM</b>ADSL</div>
+                <span class="flow-sep" aria-hidden="true">→</span>
+                <div class="flow-node"><b>5 · Submit</b>define.xml</div>
+              </div>
+              <div class="flow-foot">
+                <span class="chip chip--pass"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> the gate caught a real spec ambiguity</span>
+                <span style="color:var(--muted);font-size:.88rem;flex:1 1 12rem;min-width:0;">It forced a fix to the <em>specification</em>, not a silent data patch. Demographics is driven end-to-end to a clean compare on synthetic data; other domains are scaffolded.</span>
+                <a class="btn btn--ghost" href="pipeline.html">
+                  Read the full walkthrough
+                  <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
     </section>
 
     <!-- ===================== ABOUT ===================== -->
-    <section id="about" class="about">
-      <h2 class="section-title">About</h2>
-      <p>
-        I'm a statistician and statistical programmer — a <strong>PhD in Statistics &amp; Data
-        Science</strong> and roughly five years in SAS/CDISC clinical programming. My doctoral
-        research developed a Bayesian zero-inflated, unipolar mixture item-response-theory model
-        with covariate-dependent latent classification, applied to <strong>patient-reported symptom
-        data</strong> (alcohol-use-disorder items from the NSDUH survey): Bayesian hierarchical
-        modeling, latent-class structure, and questionnaire/PRO measurement. Over the last year I
-        designed and built a "virtual biometrics department" — a system of AI agents that produce
-        and independently QC SDTM/ADaM datasets and analysis documents for oncology trials.
-      </p>
-      <p>
-        Its guiding principle is <em>"validate the wrappers, not the brain."</em> The LLM is treated
-        as a qualified author whose output can't leave the system until deterministic, independently
-        checkable gates pass and a named human signs off — no autonomous submission, every applied
-        rule citable and versioned. That posture is what lets modern AI touch a regulated, high-stakes
-        domain at all, and it's the thread through all three projects above.
-      </p>
+    <section class="section about" id="about" aria-labelledby="about-h">
+      <div class="wrap">
+        <h2 class="section-title" id="about-h"><span>About</span></h2>
+        <div class="about-grid">
+          <p>
+            I’m a statistician and statistical programmer — a <strong>PhD in Statistics &amp; Data
+            Science</strong> and roughly five years in SAS/CDISC clinical programming. My doctoral research
+            developed a Bayesian zero-inflated, unipolar mixture item-response-theory model with
+            covariate-dependent latent classification, applied to <strong>patient-reported symptom
+            data</strong> — Bayesian hierarchical modeling, latent-class structure, and questionnaire/PRO
+            measurement.
+          </p>
+          <p>
+            Over the last year I designed and built a “virtual biometrics department” — a system of AI
+            agents that produce and independently QC SDTM/ADaM datasets and analysis documents for oncology
+            trials. Its guiding principle is <span class="pull">“validate the wrappers, not the brain”</span>:
+            the LLM is a qualified author whose output can’t leave the system until deterministic,
+            independently checkable gates pass and a named human signs off. That posture is what lets modern
+            AI touch a regulated, high-stakes domain at all — and it’s the thread through all three projects
+            above.
+          </p>
+        </div>
+      </div>
     </section>
 
-    <!-- ===================== SKILLS ===================== -->
-    <section id="skills" class="skills">
-      <h2 class="section-title">Stack</h2>
-      <div class="skill-grid">
-        <div>
-          <h3>Clinical / statistical</h3>
-          <ul>
-            <li>SAS (production + QC macros)</li>
-            <li>CDISC: SDTMIG, ADaMIG, CDASH, define.xml</li>
-            <li>RECIST 1.1, oncology endpoints (PFS/OS censoring)</li>
-            <li>Double-programming, PROC COMPARE, Pinnacle 21</li>
-            <li>R (pharmaverse), some biostatistics</li>
-          </ul>
-        </div>
-        <div>
-          <h3>AI / engineering</h3>
-          <ul>
-            <li>LLM/agent systems — Claude Agent SDK, LangGraph</li>
-            <li>RAG over regulatory standards; citation grounding</li>
-            <li>Deterministic enforcement hooks / guardrails</li>
-            <li>Evaluator gates &amp; structured output</li>
-            <li>Python · DuckDB · FastAPI · React</li>
-          </ul>
+    <!-- ===================== STACK ===================== -->
+    <section class="section" aria-labelledby="stack-h">
+      <div class="wrap">
+        <h2 class="section-title" id="stack-h"><span>Stack</span></h2>
+        <div class="stack-grid">
+          <div class="stack-col">
+            <h3>Clinical / statistical</h3>
+            <ul>
+              <li>SAS — production + QC macros</li>
+              <li>CDISC: SDTMIG, ADaMIG, CDASH, define.xml</li>
+              <li>RECIST 1.1, oncology endpoints (PFS/OS censoring)</li>
+              <li>Double-programming, PROC COMPARE, Pinnacle 21</li>
+              <li>R (pharmaverse), applied biostatistics</li>
+            </ul>
+          </div>
+          <div class="stack-col">
+            <h3>AI / engineering</h3>
+            <ul>
+              <li>LLM/agent systems — Claude Agent SDK, LangGraph</li>
+              <li>RAG over regulatory standards; citation grounding</li>
+              <li>Deterministic enforcement hooks / guardrails</li>
+              <li>Evaluator gates &amp; structured output</li>
+              <li>Python · DuckDB · FastAPI · React</li>
+            </ul>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- ===================== CONTACT ===================== -->
-    <section id="contact" class="contact">
-      <h2 class="section-title">Contact</h2>
-      <p>
-        <a href="mailto:n.bousaibah@gmail.com">n.bousaibah@gmail.com</a>
-        &nbsp;·&nbsp; <a href="https://www.linkedin.com/in/nasser-a-499b4194/" target="_blank" rel="noopener">LinkedIn</a>
-        &nbsp;·&nbsp; <a href="https://github.com/nealali" target="_blank" rel="noopener">GitHub</a>
-      </p>
-      <!-- ponytail: mailto is enough to start; add a Formspree form only if you want spam-safe intake -->
+    <section class="section" id="contact" aria-labelledby="contact-h">
+      <div class="wrap">
+        <h2 class="section-title" id="contact-h"><span>Contact</span></h2>
+        <p class="contact-lead">Building trustworthy AI for a regulated domain? Let’s talk.</p>
+        <div class="contact-links">
+          <a class="btn btn--primary" href="mailto:n.bousaibah@gmail.com">n.bousaibah@gmail.com</a>
+          <a class="btn btn--ghost" href="https://www.linkedin.com/in/nasser-a-499b4194/" target="_blank" rel="noopener">
+            LinkedIn <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 7h10v10M7 17 17 7"/></svg>
+          </a>
+          <a class="btn btn--ghost" href="https://github.com/nealali" target="_blank" rel="noopener">
+            GitHub <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 7h10v10M7 17 17 7"/></svg>
+          </a>
+          <a class="btn btn--ghost" href="assets/resume.pdf">Résumé (PDF)</a>
+        </div>
+      </div>
     </section>
 
   </main>
 
   <footer class="site-footer">
-    <p>© <span id="year">2026</span> Nasser AlAli · Built as a static page, hosted on GitHub Pages.</p>
+    <div class="wrap">
+      <span>© <span id="year">2026</span> Nasser AlAli</span>
+      <span>Static page · built by hand · hosted on GitHub Pages</span>
+    </div>
   </footer>
 
   <script>
-    // ponytail: the only JS the page needs — keep the year honest without hardcoding
+    // year
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // theme toggle
+    (function () {
+      var root = document.documentElement;
+      var btn = document.querySelector('.theme-toggle');
+      function sync() {
+        var dark = root.getAttribute('data-theme') === 'dark';
+        btn.setAttribute('aria-pressed', String(dark));
+        btn.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
+      }
+      sync();
+      btn.addEventListener('click', function () {
+        var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+        try { localStorage.setItem('theme', next); } catch (e) {}
+        sync();
+      });
+    })();
+
   </script>
 </body>
 </html>
